@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "geofences")
@@ -26,6 +29,10 @@ public class Geofence {
 
     @Column(name = "points", columnDefinition = "JSON")
     private String points; // JSON string, e.g. "[[-8.0, -79.0], [-8.1, -79.1], ...]]"
+
+    @Column(name = "fecha_creacion", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime creationDate;
 
     // Default constructor
     public Geofence() {}
@@ -69,5 +76,13 @@ public class Geofence {
 
     public void setPoints(String points) {
         this.points = points;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

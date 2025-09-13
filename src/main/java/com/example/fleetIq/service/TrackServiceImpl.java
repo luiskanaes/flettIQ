@@ -15,6 +15,8 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
@@ -85,14 +87,26 @@ public class TrackServiceImpl implements TrackService {
             if (imeis.length() > 0) imeis.append(",");
             imeis.append(device.getImei());
         }
+        System.out.println("🚪Se termina proceso automatico de extraccion GPS Tracks desde api protrack365");
 
         fetchAndSaveForImeis(imeis.toString(), beginTime, endTime, accessToken);
     }
+
 
     @Scheduled(fixedRate = 60000) // Ejecuta cada 1 minuto (60,000 milisegundos)
     public void scheduleFetchAndSaveTracks() throws Exception {
         Long beginTime = Instant.now().getEpochSecond() - 24 * 60 * 60; // Últimas 24 horas
         Long endTime = Instant.now().getEpochSecond(); // Hasta ahora
+
+        // Obtener la fecha y hora actual
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+        // Formatear la fecha y hora
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm:ss");
+        String fechaHoraFormateada = fechaHoraActual.format(formato);
+
+
+        System.out.println("✅ Se inicia proceso automatico de extraccion GPS Tracks desde api protrack365 ::: " + fechaHoraFormateada);
         fetchAndSaveTracks(beginTime, endTime);
     }
 

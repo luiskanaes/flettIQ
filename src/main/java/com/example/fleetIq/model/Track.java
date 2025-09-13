@@ -6,7 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
+
+@Data
 @Entity
 @Table(name = "tracks")
 public class Track {
@@ -86,6 +91,10 @@ public class Track {
 
     @Column(name = "temperaturetime")
     private Long temperaturetime;
+
+    @Column(name = "fecha_creacion", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime creationDate;
 
     // Getters y Setters
     public Long getId() { return id; }

@@ -4,9 +4,12 @@ import com.example.fleetIq.model.Alarm;
 import com.example.fleetIq.model.Track;
 import com.example.fleetIq.service.AlarmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -27,7 +30,17 @@ public class AlarmController {
     }
 
     @GetMapping("/alarms")
-    public List<Alarm> getAlarms() {
-        return alarmService.getAlarms();
+    public List<Alarm> getAlarms(
+            @RequestParam(required = false) String imei,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+
+        Long startTimestamp = startDateTime != null ? startDateTime.atZone(ZoneId.of("America/Lima")).toEpochSecond() : null;
+        Long endTimestamp = endDateTime != null ? endDateTime.atZone(ZoneId.of("America/Lima")).toEpochSecond() : null;
+
+        return alarmService.findAlarmsByFilters(imei, startTimestamp, endTimestamp);
     }
+
+
+
 }
